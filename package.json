@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "activecampaign": "^1.2.3",
+    "darksky": "^0.1.2",
     "express": "^4.13.3"
   },
   "engines": {
