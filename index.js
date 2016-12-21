@@ -2,14 +2,13 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const ActiveCampaign = require('activecampaign');
-const DarkSky = require('darksky');
+const Forecast = require('forecast');
 const dstk = require('dstk');
 
 app.set('port', (process.env.PORT || 5000))
 app.set('darkSkyAPI', (process.env.DARK_SKY_API_KEY || false))
-app.set('GoogleAPI', (process.env.GOOGLE_API_KEY || false))
 app.use(express.static(__dirname + '/public'))
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(request, response) {
   response.send('Hello World!')
@@ -34,9 +33,16 @@ app.post('/:account/catch/weather/', (req, res) => {
     return;
   }
 
+  // set the darksky key
+  var darkSkyKey = app.get('darkSkyAPI');
+
+  // override the key, in case we want to swap credentials from AC webhook and not env
+  if (typeof req.query.darkSkyKey == 'string') {
+    darkSkyKey = req.query.darkSkyKey;
+  }
+
   // parse the ActiveCampaign webhook
   var contact = req.body.contact;
-
 
   let ac = new ActiveCampaign(accountString, apiKey);
   ac.credentials_test().then((result) => {
@@ -54,15 +60,39 @@ app.post('/:account/catch/weather/', (req, res) => {
         return;
       }
 
-      // do stuff
-      console.log('The contact is located in: ', data);
+      location = data[contact.ip4];
+      // build some geo stuffs
+      console.log('The contact is located in: ', data[contact.ip4]);
+      var updateContact = {
+        geo_lat: location.latitude.toString(),
+        geo_long: location.longitude.toString()
+      }
+      console.log('Lat is a type of %s, and is %s', typeof updateContact.geo_lat, updateContact.geo_lat);
+      console.log('long is a type of %s, and is %s', typeof updateContact.geo_long, updateContact.geo_long);
+
+      // call Dark Sky
+      var forecast = new Forecast({
+        service: 'darksky',
+        key: darkSkyKey,
+        cache: true
+      });
+
+      forecast.get([location.latitude, location.longitude], (err, weather) => {
+        // handle err
+        if (err) {
+          console.log('darkSkyKey error: ', err);
+          return;
+        }
+
+        console.log('The forecast is: ', weather);
+      });
+
     });
 
-
     // do stuff
-
     res.status(200).send('Yay!')
     return;
+
   });
 
 });
