@@ -12,6 +12,7 @@
     "darksky": "^0.1.2",
     "dstk": "0.0.2",
     "express": "^4.13.3",
+    "forecast": "^0.3.2",
     "node-geocoder": "^3.15.2"
   },
   "engines": {
