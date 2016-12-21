@@ -8,8 +8,11 @@
   },
   "dependencies": {
     "activecampaign": "^1.2.3",
+    "body-parser": "^1.15.2",
     "darksky": "^0.1.2",
-    "express": "^4.13.3"
+    "dstk": "0.0.2",
+    "express": "^4.13.3",
+    "node-geocoder": "^3.15.2"
   },
   "engines": {
     "node": "4.0.0"
