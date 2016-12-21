@@ -1,9 +1,10 @@
-const express = require('express')
-const app = express()
-const ActiveCampaign = require("activecampaign");
+const express = require('express');
+const app = express();
+const ActiveCampaign = require('activecampaign');
+const DarkSky = require('darksky');
 
 app.set('port', (process.env.PORT || 5000))
-app.set('darkSkyAPI', (process.env.darkSkyAPI || false))
+app.set('darkSkyAPI', (process.env.DARK_SKY_API_KEY || false))
 app.use(express.static(__dirname + '/public'))
 
 app.get('/', function(request, response) {
@@ -19,18 +20,24 @@ app.get('/:account/catch/weather/', (req, res) => {
   // if no api key break
   let apiKey = req.query.apiKey;
   if (!apiKey) {
-    res.status(403).send('That doesn\'t look like a valid account/key pair')
+    res.status(403).send('That doesn\'t look like a valid ActiveCampaign account/key pair')
     return;
   }
   let ac = new ActiveCampaign(accountString, apiKey);
   ac.credentials_test().then((result) => {
     if (!result.success) {
       // API key/account mismatch
-      res.status(403).send('That doesn\'t look like a valid account/key pair')
+      res.status(403).send('That doesn\'t look like a valid ActiveCampaign account/key pair')
       return;
     }
-    // do stuff
+    // make sure we are getting a Dark Sky API key somehow
+    if ((!app.get('darkSkyAPI')) && (typeof req.query.darkSkyKey != 'string')) {
+      res.status(403).send('A DarkSky API key is required');
+      return;
+    }
 
+    res.send('Yay!')
+    return;
   });
 
 });
