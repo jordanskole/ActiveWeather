@@ -86,9 +86,12 @@ app.post('/:account/catch/weather/', (req, res) => {
           return;
         }
 
-        updateContact.temp_icon = weather.daily.data[0].icon;
-        updateContact.temp_min = weather.daily.data[0].temperatureMin;
-        updateContact.temp_max = weather.daily.data[0].temperatureMax;
+        // updateContact.temp_icon = weather.daily.data[0].icon;
+        updateContact['field[%TEMPICON%]'] = weather.daily.data[0].icon;
+        // updateContact.temp_min = weather.daily.data[0].temperatureMin;
+        updateContact['field[%TEMPLOW%]'] = weather.daily.data[0].temperatureMin;
+        // updateContact.temp_max = weather.daily.data[0].temperatureMax;
+        updateContact['field[%TEMPHIGH%]'] = weather.daily.data[0].temperatureMax;
 
         ac.api('contact/sync', updateContact).then((result) => {
           console.log('updated contact: ', result);
