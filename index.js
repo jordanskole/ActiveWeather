@@ -64,8 +64,9 @@ app.post('/:account/catch/weather/', (req, res) => {
       // build some geo stuffs
       console.log('The contact is located in: ', data[contact.ip4]);
       var updateContact = {
-        geo_lat: location.latitude.toString(),
-        geo_long: location.longitude.toString()
+        'email': contact.email,
+        'field[%GEOLAT%]': location.latitude.toString(),
+        'field[%GEOLONG%]': location.longitude.toString()
       }
       console.log('Lat is a type of %s, and is %s', typeof updateContact.geo_lat, updateContact.geo_lat);
       console.log('long is a type of %s, and is %s', typeof updateContact.geo_long, updateContact.geo_long);
@@ -74,7 +75,8 @@ app.post('/:account/catch/weather/', (req, res) => {
       var forecast = new Forecast({
         service: 'darksky',
         key: darkSkyKey,
-        cache: true
+        cache: true,
+        units: 'fahrenheit'
       });
 
       forecast.get([location.latitude, location.longitude], (err, weather) => {
@@ -84,7 +86,18 @@ app.post('/:account/catch/weather/', (req, res) => {
           return;
         }
 
-        console.log('The forecast is: ', weather);
+        // updateContact.temp_icon = weather.daily.data[0].icon;
+        updateContact['field[%TEMPICON%]'] = weather.daily.data[0].icon;
+        // updateContact.temp_min = weather.daily.data[0].temperatureMin;
+        updateContact['field[%TEMPLOW%]'] = weather.daily.data[0].temperatureMin;
+        // updateContact.temp_max = weather.daily.data[0].temperatureMax;
+        updateContact['field[%TEMPHIGH%]'] = weather.daily.data[0].temperatureMax;
+
+        ac.api('contact/sync', updateContact).then((result) => {
+          console.log('updated contact: ', result);
+        });
+
+        console.log('The contacts forecast is: ', updateContact);
       });
 
     });
