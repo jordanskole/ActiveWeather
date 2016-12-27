@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(request, response) {
-  response.send('Hello World!')
+  response.sendFile('./public/index.html');
 })
 
 app.post('/:account/catch/weather/', (req, res) => {
