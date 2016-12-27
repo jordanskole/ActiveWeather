@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ActiveWeather</title>
+  </head>
+  <body>
+    <h1>Welcome to your ActiveWeather app</h1>
+    <h2>Get Started</h2>
+    <ul>
+      <li>Read the blog post</li>
+      <li><a href="https://github.com/jordanskole/ActiveWeather" alt="ActiveWeather repo on GitHub">Check out the ActiveWeather repo on GitHub</a></li>
+      <li><a href="https://darksky.net/dev/" alt="DarkSky API Key">Get a DarkSky API key</a></li>
+    </ul>
+    <h2>Your App</h2>
+    <ul>
+      <li>Your url for the webhook is: <pre><span id="webhook-url"></span></pre></li>
+    </ul>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        var webhookUrl = 'https://' + window.location.host + '/{{ Account }}/catch/weather'
+        document.getElementById("webhook-url").innerHTML = webhookUrl;
+      })
+    </script>
+  </body>
+</html>

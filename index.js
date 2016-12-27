@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -11,7 +13,7 @@ app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(request, response) {
-  response.send('Hello World!')
+  response.sendFile('./public/index.html');
 })
 
 app.post('/:account/catch/weather/', (req, res) => {
@@ -112,7 +114,7 @@ app.post('/:account/catch/weather/', (req, res) => {
 
 // catch all other urls
 app.get('*', (req, res) => {
-  res.send('All who wander are not lost. Try \'{base}/{account}/catch/weather\'', 404);
+  res.status(404).send('All who wander are not lost. Try \'{base}/{account}/catch/weather\'');
 });
 
 app.listen(app.get('port'), function() {
