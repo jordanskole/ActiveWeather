@@ -13,15 +13,35 @@
       <li><a href="https://darksky.net/dev/" alt="DarkSky API Key">Get a DarkSky API key</a></li>
     </ul>
     <h2>Your App</h2>
-    <ul>
-      <li>Your url for the webhook is: <pre><span id="webhook-url"></span></pre></li>
-    </ul>
-
+    <fieldset style="max-width: 50%;">
+      <legend>Generate your webhook url</legend>
+      Enter your ActiveCampaign API account url (located in settings --> developers):<br>
+      <input type="text" name="ac-url" value="" id="ac-url"><br><br>
+      Enter your ActiveCampaign API Key (this is not saved anywhere):<br>
+      <input type="text" name="ac-key" value="" id="ac-key"><br><br>
+      <button onclick="buildUrl()">Generate URL</button><br><br>
+      <p>Your webhook url is: <mark><code><span id="webhook-url"></span></code></mark></p>
+    </fieldset>
     <script>
-      document.addEventListener("DOMContentLoaded", (event) => {
-        var webhookUrl = 'https://' + window.location.host + '/{{ Account }}/catch/weather'
+      function buildUrl () {
+        var acAccountUrl = document.getElementById('ac-url').value;
+        if (typeof acAccountUrl.split('//')[1] == 'undefined') {
+          alert('Please enter a valid account url');
+          return;
+        }
+        if (acAccountUrl.split('//')[1].split('.')[0].length == 0) {
+          alert('Please enter a valid account url');
+          return;
+        }
+        var acAccount = acAccountUrl.split('//')[1].split('.')[0];
+        var acKey = document.getElementById('ac-key').value;
+        if (acKey == 'undefined' || acKey.length == 0) {
+          alert('Please enter an ActiveCampaign API key');
+          return;
+        }
+        var webhookUrl = 'https://' + window.location.host + '/' + acAccount + '/catch/weather?apiKey=' + acKey;
         document.getElementById("webhook-url").innerHTML = webhookUrl;
-      })
+      }
     </script>
   </body>
 </html>
