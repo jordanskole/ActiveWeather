@@ -1,7 +1,13 @@
 {
-  "name": "Node.js Sample",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-sample",
-  "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "static"]
+  "name": "ActiveWeather",
+  "description": "A simple enrichment 'microservice' API for ActiveCampaign",
+  "repository": "https://github.com/jordanskole/ActiveWeather",
+  "logo": "https://www.activecampaign.com/about/media/logos/ac_mark_blue.png",
+  "keywords": ["node", "express", "static", "ActiveCampaign", "marketing", "weather", "darksky"],
+  "website": "https://activecampaign.com/blog/",
+  "env": {
+    "DARK_SKY_API_KEY": {
+      "description": "An optional DarkSky API Key. You can alternatively pass the DarkSky API key as a query param."      
+    }
+  }
 }
