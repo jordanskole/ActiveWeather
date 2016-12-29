@@ -18,20 +18,25 @@ app.get('/', function(request, response) {
 
 app.post('/:account/catch/weather/', (req, res) => {
 
+  console.log('Weather POST catch called');
+
   // build our api base url for making API requests
   let account = req.params.account;
   let accountString = `https://${account}.api-us1.com`
+  console.log('accountString: ', accountString);
 
   // if no api key break
   let apiKey = req.query.apiKey;
   if (!apiKey) {
     res.status(403).send('That doesn\'t look like a valid ActiveCampaign account/key pair')
+    console.log('ActiveCampaign key missing');
     return;
   }
 
   // make sure we are getting a Dark Sky API key somehow
   if ((!app.get('darkSkyAPI')) && (typeof req.query.darkSkyKey != 'string')) {
     res.status(403).send('A DarkSky API key is required. Read more: https://www.activecampaign.com/blog/');
+    console.log('DarkSky key missing');
     return;
   }
 
@@ -43,6 +48,8 @@ app.post('/:account/catch/weather/', (req, res) => {
     darkSkyKey = req.query.darkSkyKey;
   }
 
+  console.log('DarkSky key set to: ', darkSkyKey);
+
   // parse the ActiveCampaign webhook
   var contact = req.body.contact;
 
@@ -51,6 +58,7 @@ app.post('/:account/catch/weather/', (req, res) => {
     if (!result.success) {
       // API key/account mismatch
       res.status(403).send('That doesn\'t look like a valid ActiveCampaign account/key pair')
+      console.log('ActiveCampaign credentials error');
       return;
     }
 
@@ -59,6 +67,7 @@ app.post('/:account/catch/weather/', (req, res) => {
       // handle err
       if (err) {
         res.status(500).send('Something went wrong');
+        console.log('dstk error');
         return;
       }
 
