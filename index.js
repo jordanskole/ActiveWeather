@@ -72,7 +72,7 @@ app.post('/:account/catch/weather/', (req, res) => {
         return;
       }
 
-      location = data[contact.ip4];
+      var location = data[contact.ip4];
       // build some geo stuffs
       console.log('The contact is located in: ', data[contact.ip4]);
       var updateContact = {
