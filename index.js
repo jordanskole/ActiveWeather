@@ -52,6 +52,7 @@ app.post('/:account/catch/weather/', (req, res) => {
 
   // parse the ActiveCampaign webhook
   var contact = req.body.contact;
+  console.log('Contact IP address: ', contact.ip4);
 
   let ac = new ActiveCampaign(accountString, apiKey);
   ac.credentials_test().then((result) => {
